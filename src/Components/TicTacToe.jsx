@@ -19,7 +19,7 @@ const winningCombinations = [
     { combo: [2, 4, 6], strikeClass: "strike-diagonal-2" }
 ]
 
-function checkWinner(tiles, setStrikeClass, setGameState) {
+function checkWinner(tiles, setStrikeClass, setGameState, gameState) {
     for (const { combo, strikeClass } of winningCombinations) {
 
         const tileValue1 = tiles[combo[0]]
@@ -32,16 +32,15 @@ function checkWinner(tiles, setStrikeClass, setGameState) {
             tileValue1 === tileValue3
         ) {
             setStrikeClass(strikeClass)
-            if(tileValue1 === playerX){
+            if (tileValue1 === playerX) {
                 setGameState('playerXWins')
             } else {
                 setGameState('playerOWins')
             }
         }
-        
     }
-    const allTilesFilledIn = tiles.every((tile)=> tile !== null);
-    if(allTilesFilledIn) setGameState('draw')
+    const allTilesFilledIn = tiles.every((tile) => tile !== null);
+    if (allTilesFilledIn && gameState === 'inProgress') setGameState('draw')
 }
 
 export default function TicTacToe() {
@@ -50,14 +49,14 @@ export default function TicTacToe() {
     const [strikeClass, setStrikeClass] = useState('');
     const [gameState, setGameState] = useState('inProgress')
 
-    const handleReset = () =>{
+    const handleReset = () => {
         setGameState('inProgress');
         setPlayerTurn(playerX);
         setTiles(Array(9).fill(null));
         setStrikeClass('')
     }
     const handleTileClick = (index) => {
-        if(gameState !== 'inProgress'){
+        if (gameState !== 'inProgress') {
             return
         }
 
@@ -75,7 +74,7 @@ export default function TicTacToe() {
     }
 
     useEffect(() => {
-        checkWinner(tiles, setStrikeClass, setGameState)
+        checkWinner(tiles, setStrikeClass, setGameState, gameState)
     }, [tiles])
 
     return (
@@ -90,7 +89,7 @@ export default function TicTacToe() {
                 strikeClass={strikeClass}
             />
             <GameOver gameState={gameState} />
-            <Reset gameState={gameState} handleReset={handleReset}/>
+            <Reset gameState={gameState} handleReset={handleReset} />
 
         </div>
     )

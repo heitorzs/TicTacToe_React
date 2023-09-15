@@ -2,8 +2,8 @@ body{
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: black;
-  color: white;
+  background-color:  black;
+  color: rgb(255, 255, 255);
 }
 
 h1 {
@@ -26,11 +26,11 @@ h1 {
 }
 
 .right-border {
-  border-right: 0.2em solid #0074a6;
+  border-right: 0.2em solid white;
 }
 
 .bottom-border {
-  border-bottom: 0.2em solid #0074a6;
+  border-bottom: 0.2em solid white;
 }
 
 .x-hover:hover::after {
@@ -105,11 +105,16 @@ h1 {
   margin-top: 18px;
   margin-bottom: 25px;
   padding: 15px;
-  background-color: #015672;
+  background-color: #01567211;
   color: white;
   width: 100%;
   font-size: 1.5em;
   border-radius: 1.5em;
   border: none;
+  cursor: pointer;
+}
+
+.reset-button:hover {
+  font-size: 2em;
 }
 
