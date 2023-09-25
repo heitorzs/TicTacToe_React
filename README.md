@@ -1,5 +1,8 @@
 # Getting Started with Create React App
 
+try it:
+https://tic-tac-toe-react-beta-tawny.vercel.app/
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
