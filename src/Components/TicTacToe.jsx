@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Board from './Board'
 import GameOver from './GameOver';
 import Reset from './Reset';
+import GameState from './GameState';
 
 const playerX = 'X';
 const playerO = 'O';
@@ -30,67 +31,70 @@ function checkWinner(tiles, setStrikeClass, setGameState, gameState) {
             tileValue1 !== null &&
             tileValue1 === tileValue2 &&
             tileValue1 === tileValue3
-        ) {
-            setStrikeClass(strikeClass)
+          ) {
+            setStrikeClass(strikeClass);
             if (tileValue1 === playerX) {
-                setGameState('playerXWins')
+              setGameState(GameState.playerXwins);
             } else {
-                setGameState('playerOWins')
+              setGameState(GameState.playerOwins);
+            }
+            return;
+          }
+        }
+      
+        const areAllTilesFilledIn = tiles.every((tile) => tile !== null);
+        if (areAllTilesFilledIn) {
+          setGameState(GameState.draw);
+        }}
+
+    export default function TicTacToe() {
+        const [tiles, setTiles] = useState(Array(9).fill(null));
+        const [playerTurn, setPlayerTurn] = useState(playerX);
+        const [strikeClass, setStrikeClass] = useState('');
+        const [gameState, setGameState] = useState(GameState.inProgress)
+
+        const handleReset = () => {
+            setGameState(GameState.inProgress);
+            setPlayerTurn(playerX);
+            setTiles(Array(9).fill(null));
+            setStrikeClass('')
+        }
+        const handleTileClick = (index) => {
+            if (gameState !== GameState.inProgress) {
+                return
+            }
+
+            if (tiles[index] !== null) { //checking if tiles has content
+                return
+            }
+            const newTiles = [...tiles];
+            newTiles[index] = playerTurn;
+            setTiles(newTiles);
+            if (playerTurn === playerX) { //changing player turn 
+                setPlayerTurn(playerO)
+            } else {
+                setPlayerTurn(playerX)
             }
         }
+
+        useEffect(() => {
+            checkWinner(tiles, setStrikeClass, setGameState, gameState)
+        }, [tiles])
+
+        return (
+            <div>
+                <h1>Tic Tac Toe</h1>
+
+
+                <Board
+                    tiles={tiles}
+                    onTileClick={handleTileClick}
+                    playerTurn={playerTurn}
+                    strikeClass={strikeClass}
+                />
+                <GameOver gameState={gameState} />
+                <Reset gameState={gameState} handleReset={handleReset} />
+
+            </div>
+        )
     }
-    const allTilesFilledIn = tiles.every((tile) => tile !== null);
-    if (allTilesFilledIn && gameState === 'inProgress') setGameState('draw')
-}
-
-export default function TicTacToe() {
-    const [tiles, setTiles] = useState(Array(9).fill(null));
-    const [playerTurn, setPlayerTurn] = useState(playerX);
-    const [strikeClass, setStrikeClass] = useState('');
-    const [gameState, setGameState] = useState('inProgress')
-
-    const handleReset = () => {
-        setGameState('inProgress');
-        setPlayerTurn(playerX);
-        setTiles(Array(9).fill(null));
-        setStrikeClass('')
-    }
-    const handleTileClick = (index) => {
-        if (gameState !== 'inProgress') {
-            return
-        }
-
-        if (tiles[index] !== null) { //checking if tiles has content
-            return
-        }
-        const newTiles = [...tiles];
-        newTiles[index] = playerTurn;
-        setTiles(newTiles);
-        if (playerTurn === playerX) { //changing player turn 
-            setPlayerTurn(playerO)
-        } else {
-            setPlayerTurn(playerX)
-        }
-    }
-
-    useEffect(() => {
-        checkWinner(tiles, setStrikeClass, setGameState, gameState)
-    }, [tiles])
-
-    return (
-        <div>
-            <h1>Tic Tac Toe</h1>
-
-
-            <Board
-                tiles={tiles}
-                onTileClick={handleTileClick}
-                playerTurn={playerTurn}
-                strikeClass={strikeClass}
-            />
-            <GameOver gameState={gameState} />
-            <Reset gameState={gameState} handleReset={handleReset} />
-
-        </div>
-    )
-}

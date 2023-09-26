@@ -1,18 +1,20 @@
 import React from 'react'
+import GameState from './GameState'
+
 
 export default function GameOver({ gameState }) {
 
-    if (gameState === 'inProgress') {
-        return <></>
-    } else if (gameState === 'playerOWins') {
-        return <div className='game-over'>O Wins</div>
-    } else if (gameState === 'playerXWins') {
-        return <div className='game-over'>X Wins</div>
+    switch (gameState) {
+        case GameState.inProgress:
+            return <></>
+        case GameState.playerXwins:
+            return <div className='game-over'>X Wins</div>
+        case GameState.playerOwins:
+            return <div className='game-over'>O Wins</div>
+        case GameState.draw:
+            return <div className='game-over'>Draw</div>
+        default:
+            return <></>
     }
-    else {
-        return <div className='game-over'>Draw</div>
-
-    }
-
 
 }
